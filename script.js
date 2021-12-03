@@ -1,5 +1,19 @@
+//container - row - col -md -4
+const bootstrapContainer = document.createElement("div");
+bootstrapContainer.setAttribute("class", "container");
+
+const bootstrapRow = document.createElement("div");
+bootstrapRow.setAttribute("class", "row");
+
+const colMd4 = document.createElement("div");
+colMd4.setAttribute("class", "col-md-10");
+
+document.body.appendChild(bootstrapContainer);
+bootstrapContainer.appendChild(bootstrapRow);
+bootstrapRow.appendChild(colMd4);
 
 //Div created
+let multiFood = [];
 const createDiv = document.createElement("div");
 createDiv.setAttribute("class", "form-group");
 
@@ -8,7 +22,9 @@ const title = document.createElement("h1");
 title.setAttribute("id", "title");
 title.setAttribute("class", "display-4");
 title.innerHTML = "DOM Manipulation";
-createDiv.appendChild(title);
+title.style.textAlign = "center";
+title.style.color = "#337ab7";
+colMd4.appendChild(title);
 
 //create p tag
 
@@ -16,7 +32,9 @@ const description = document.createElement("p");
 description.setAttribute("id", "description");
 description.innerHTML = "Dom Manipulation with Forms";
 description.setAttribute("class", "h4");
-createDiv.appendChild(description);
+description.style.textAlign = "center";
+description.style.color = "black";
+colMd4.appendChild(description);
 
 //Form created
 const createForm = document.createElement("form");
@@ -68,7 +86,7 @@ const pincode = document.createElement("input");
 pincode.setAttribute("id", "pincode");
 pincode.setAttribute("type", "text");
 pincode.setAttribute("name", "pincode");
-pincode.setAttribute("placeholder", "pincode");
+pincode.setAttribute("placeholder", "Pincode");
 pincode.setAttribute("class", "form-control");
 pincode.required = true;
 
@@ -79,7 +97,7 @@ radioBtnDiv.setAttribute(
 );
 //Gender - Male
 const genderLabel = document.createElement("label");
-genderLabel.setAttribute("for", "customRadioInline1");
+genderLabel.setAttribute("for", "choice");
 genderLabel.innerHTML = "Male";
 genderLabel.setAttribute("class", "custom-control-label");
 
@@ -87,20 +105,22 @@ const genderMale = document.createElement("input");
 genderMale.setAttribute("id", "customRadioInline1");
 genderMale.setAttribute("type", "radio");
 genderMale.setAttribute("value", "Male");
-genderMale.setAttribute("name", "customRadioInline1");
+genderMale.setAttribute("name", "choice");
+genderMale.style.margin = "10px";
 genderMale.setAttribute("class", "custom-control-input");
 
 //Gender - Female
 const genderLabelFemale = document.createElement("label");
 genderLabelFemale.setAttribute("for", "female");
 genderLabelFemale.innerHTML = "Female";
+genderLabelFemale.style.margin = "10px";
 genderLabelFemale.setAttribute("class", "custom-control-label");
 
 const genderFemale = document.createElement("input");
 genderFemale.setAttribute("id", "female");
 genderFemale.setAttribute("type", "radio");
 genderFemale.setAttribute("value", "Female");
-genderFemale.setAttribute("name", "gender");
+genderFemale.setAttribute("name", "choice");
 genderFemale.setAttribute("class", "custom-control-input");
 
 const finalDiv = document.createElement("div");
@@ -110,24 +130,33 @@ finalDiv.setAttribute("class", "form-group");
 
 const dropdownOptions = document.createElement("label");
 dropdownOptions.innerHTML = "Choice of Food ";
+dropdownOptions.setAttribute("for", "food");
+dropdownOptions.style.display = "block";
 
 //select tag
 
 const selectTag = document.createElement("select");
-selectTag.setAttribute("id", "select");
+selectTag.setAttribute("id", "food");
+selectTag.setAttribute("name", "food");
+selectTag.multiple = true;
 
 let favFood = ["Grill", "Noodles", "Cutlet", "Coffee", "Rice"];
 for (const food of favFood) {
   let optionsInDropdown = document.createElement("option");
   optionsInDropdown.innerHTML = food;
   optionsInDropdown.classList.add("options");
+  optionsInDropdown.style.padding = "12px";
   optionsInDropdown.setAttribute("id", food);
   selectTag.appendChild(optionsInDropdown);
 }
 selectTag.addEventListener("change", function () {
-  alert("Selected" + document.getElementById("option"));
-  alert("Selected");
+  multiFood = document.querySelectorAll("#food :checked");
 });
+
+const ptag = document.createElement("p");
+ptag.innerHTML = "*Note to do multiselect press ctrl key from keyboard  ";
+ptag.style.color = "red";
+dropdownOptions.appendChild(ptag);
 
 const divFive = document.createElement("div");
 divFive.setAttribute("class", "form-group");
@@ -135,7 +164,7 @@ divFive.setAttribute("class", "form-group");
 const state = document.createElement("input");
 state.setAttribute("id", "state");
 state.setAttribute("type", "text");
-state.setAttribute("name", "pincode");
+state.setAttribute("name", "state");
 state.setAttribute("placeholder", "State");
 state.setAttribute("class", "form-control");
 state.required = true;
@@ -143,7 +172,7 @@ state.required = true;
 //country
 const divSix = document.createElement("div");
 divSix.setAttribute("class", "form-group");
-//state
+
 const country = document.createElement("input");
 country.setAttribute("id", "country");
 country.setAttribute("type", "text");
@@ -152,20 +181,18 @@ country.setAttribute("placeholder", "Country");
 country.setAttribute("class", "form-control");
 country.required = true;
 
-
-
-const submitButton = document.createElement("input");
-submitButton.setAttribute("type", "submit");
-submitButton.setAttribute("value", "Submit");
+const submitButton = document.createElement("button");
+submitButton.setAttribute("type", "button");
+submitButton.innerHTML = "Submit";
 submitButton.setAttribute("id", "submit");
 submitButton.setAttribute(
   "class",
   "btn btn-primary btn btn-secondary btn-lg btn-block"
 );
-submitButton.addEventListener("click",  generate_table);
+submitButton.addEventListener("click", popUpTableOnSubmit);
 
-
-document.body.appendChild(createDiv);
+// document.body.appendChild(createDiv);
+colMd4.appendChild(createDiv);
 
 createDiv.appendChild(createForm);
 
@@ -187,7 +214,6 @@ createForm.appendChild(divThree);
 createForm.appendChild(breakElem.cloneNode());
 
 createForm.appendChild(radioBtnDiv);
-// radioBtnDiv.appendChild()
 
 radioBtnDiv.appendChild(genderLabel);
 radioBtnDiv.appendChild(genderMale);
@@ -211,57 +237,90 @@ createForm.appendChild(breakElem.cloneNode());
 
 createForm.appendChild(submitButton);
 createForm.appendChild(breakElem.cloneNode());
-let tableDetails = [];
-function generate_table() {
 
-  const firstName = document.querySelector('#first-name').value;
-  const lastName = document.getElementById('last-name').value;
-  const country_Details = document.getElementById('country').value;
-  const state_Details = document.getElementById('state').value;
-  const pincode_Details = document.getElementById('pincode').value;
-  localStorage.setItem('firstName', firstName);
-  localStorage.setItem('lastName', lastName);
-  localStorage.setItem('state', state_Details);
-  localStorage.setItem('pincode',pincode_Details);
-  localStorage.setItem('country',country_Details);
-  tableDetails.push(localStorage.getItem('firstName'),
-  localStorage.getItem('lastName'),
-  localStorage.getItem('state'),
-  localStorage.getItem('country'),
-  localStorage.getItem('pincode'));
-  console.log("123",tableDetails);
-  console.log("123",tableDetails.length);
-  // creates a <table> element and a <tbody> element
-  var tbl = document.createElement("table");
-  tbl.setAttribute("class", "table");
-  var tblBody = document.createElement("tbody");
-  var row = document.createElement("tr");
+function popUpTableOnSubmit() {
+  let tableValues = [];
+  let selectedValue = "";
+  let finalSelection = [];
+  
+  const firstName = document.querySelector("#first-name").value;
+  const lastName = document.getElementById("last-name").value;
+  const address = document.querySelector("#address").value;
+  const pincode_Details = document.getElementById("pincode").value;
+  const state_Details = document.getElementById("state").value;
+  const country_Details = document.querySelector("#country").value;
 
-  // creating all cells
-  for (var i = 0; i < 1; i++) {
-    // creates a table row
-    var row = document.createElement("tr");
+  const gender = document.querySelectorAll('input[name="choice"]');
+  for (const gen of gender) {
+    if (gen.checked) selectedValue = gen.value;
+  }
+  finalSelection = [...multiFood].map((option) => option.value);
 
-    for (var j = 0; j < tableDetails.length; j++) {
-      // Create a <td> element and a text node, make the text
-      // node the contents of the <td>, and put the <td> at
-      // the end of the table row
-      var cell = document.createElement("td");
-      var cellText = document.createTextNode(tableDetails[j]
-      );
-      cell.appendChild(cellText);
-      
-      row.appendChild(cell);
-    }
+  tableValues.push(
+    firstName,
+    lastName,
+    address,
+    pincode_Details,
+    selectedValue,
+    finalSelection,
+    state_Details,
+    country_Details
+  );
+  
+  const table_Div = document.createElement("div");
+  table_Div.setAttribute("class", "form-group");
 
-    // add the row to the end of the table body
-    tblBody.appendChild(row);
+  const createTable = document.createElement("table");
+  createTable.setAttribute("border", "3px solid black");
+  createTable.setAttribute("class", "table");
+
+  const thead = document.createElement("thead");
+
+  const table_Row = document.createElement("tr");
+  createTable.appendChild(thead);
+
+  thead.appendChild(table_Row);
+
+  let tableHeaderValues = [
+    "First Name",
+    "Last Name",
+    "Address",
+    "Pincode",
+    "Gender",
+    "Food Choices",
+    "State",
+    "Country",
+  ];
+  let table_Header = [];
+  let tableText = [];
+
+  for (let i = 0; i < tableHeaderValues.length; i++) {
+    table_Header[i] = document.createElement("th");
+    tableText[i] = document.createTextNode(tableHeaderValues[i]);
+    table_Header[i].appendChild(tableText[i]);
+    table_Row.appendChild(table_Header[i]);
   }
 
-  // put the <tbody> in the <table>
-  tbl.appendChild(tblBody);
-  // appends <table> into <body>
-  document.body.appendChild(tbl);
-  // sets the border attribute of tbl to 2;
-  tbl.setAttribute("border", "2");
+  const table_Body = document.createElement("tbody");
+  createTable.appendChild(table_Body);
+
+  var row = document.createElement("tr");
+  var cell = [];
+  var cellText = [];
+  for (var j = 0; j < tableValues.length; j++) {
+    // Create a <td> element and a text node, make the text
+    // node the contents of the <td>, and put the <td> at
+    // the end of the table row
+    cell[j] = document.createElement("td");
+    cellText[j] = document.createTextNode(tableValues[j]);
+    cell[j].appendChild(cellText[j]);
+    row.appendChild(cell[j]);
+  }
+
+  // add the row to the end of the tabl
+  table_Body.appendChild(row);
+
+  // document.body.appendChild(createTable);
+  colMd4.appendChild(table_Div);
+  table_Div.appendChild(createTable);
 }
